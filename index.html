@@ -22,12 +22,12 @@
             align-items: center;
             overflow: hidden;
             padding: 20px;
+            line-height: 1.5;
         }
         
         .bsod-container {
             max-width: 800px;
             width: 100%;
-            text-align: center;
         }
         
         .sad-face {
@@ -49,7 +49,6 @@
         }
         
         .error-info {
-            text-align: left;
             font-size: 14px;
             margin: 25px 0;
             line-height: 1.8;
@@ -71,16 +70,44 @@
             animation: progress-animation 5s infinite;
         }
         
+        .qr-section {
+            display: flex;
+            align-items: flex-start;
+            margin: 30px 0;
+        }
+        
         .qr-code {
-            margin: 30px auto;
             width: 120px;
             height: 120px;
             background-color: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 80px;
-            color: #0078D7;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .qr-code-content {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            grid-template-rows: repeat(11, 1fr);
+            width: 100%;
+            height: 100%;
+            padding: 5px;
+        }
+        
+        .qr-pixel {
+            background-color: #0078D7;
+            margin: 1px;
+        }
+        
+        .qr-info {
+            font-size: 14px;
+        }
+        
+        .error-details {
+            font-size: 14px;
+            margin-top: 10px;
         }
         
         .footer {
@@ -99,6 +126,14 @@
             .sad-face { font-size: 60px; }
             .main-message { font-size: 22px; }
             .secondary-message { font-size: 14px; }
+            
+            .qr-section {
+                flex-direction: column;
+            }
+            
+            .qr-code {
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
@@ -118,15 +153,35 @@
             <div>0% complete</div>
         </div>
         
-        <div class="qr-code">
-            <div>✓</div>
-        </div>
-        
-        <div class="error-info">
-            <div>For more information about this issue and possible fixes, visit https://www.windows.com/stopcode</div>
-            <br>
-            <div>If you call a support person, give them this info:</div>
-            <div>Stop code: CRITICAL_PROCESS_DIED</div>
+        <div class="qr-section">
+            <div class="qr-code">
+                <div class="qr-code-content">
+                    <!-- This is a simplified representation of a QR code -->
+                    <div class="qr-pixel" style="grid-area: 1/1/4/4;"></div>
+                    <div class="qr-pixel" style="grid-area: 1/9/4/12;"></div>
+                    <div class="qr-pixel" style="grid-area: 9/1/12/4;"></div>
+                    <div class="qr-pixel" style="grid-area: 3/3/4/4;"></div>
+                    <div class="qr-pixel" style="grid-area: 3/10/4/11;"></div>
+                    <div class="qr-pixel" style="grid-area: 10/3/11/4;"></div>
+                    <div class="qr-pixel" style="grid-area: 6/6/7/7;"></div>
+                    <div class="qr-pixel" style="grid-area: 8/6/9/7;"></div>
+                </div>
+            </div>
+            
+            <div class="qr-info">
+                <div>For more information about this issue and possible fixes, visit</div>
+                <div>https://www.windows.com/stopcode</div>
+                <br>
+                <div>If you call a support person, give them this info:</div>
+                <div class="error-details">
+                    Stop code: CRITICAL_PROCESS_DIED<br>
+                    Error: 0x000000EF<br>
+                    Parameter 1: 0x0000000000000000<br>
+                    Parameter 2: 0x0000000000000000<br>
+                    Parameter 3: 0x0000000000000000<br>
+                    Parameter 4: 0x0000000000000000<br>
+                </div>
+            </div>
         </div>
         
         <div class="footer">
@@ -137,10 +192,6 @@
     <script>
         // Make the page full screen (works when launched from a user interaction)
         document.addEventListener('DOMContentLoaded', function() {
-            document.body.requestFullscreen().catch(err => {
-                console.log('Fullscreen error:', err);
-            });
-            
             // Update progress percentage
             let progress = 0;
             const progressBar = document.querySelector('.progress-bar');
@@ -164,26 +215,11 @@
                 progressBar.style.width = `${progress}%`;
                 percentText.textContent = `${Math.round(progress)}% complete`;
             }, 200);
-            
-            // Make the QR code look more authentic
-            const qrCode = document.querySelector('.qr-code');
-            setTimeout(() => {
-                qrCode.innerHTML = '<div style="font-size: 14px; color: black; padding: 5px;">Scan this QR code with your phone to learn more</div>';
-            }, 4000);
         });
         
         function startProgress() {
             // This would restart the progress animation
         }
-        
-        // Capture the Escape key to prevent exiting full screen easily
-        document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement) {
-                document.body.requestFullscreen().catch(err => {
-                    console.log('Fullscreen error:', err);
-                });
-            }
-        });
         
         // Also prevent right-click context menu
         document.addEventListener('contextmenu', e => e.preventDefault());
